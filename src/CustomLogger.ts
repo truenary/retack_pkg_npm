@@ -5,7 +5,7 @@ interface ErrorDetails {
   }
   
   class CustomLogger {
-    private static endpoint = "https://api.dev.retack.ai/observe/error-log/";
+    private static endpoint = "https://api.retack.ai/observe/error-log/";
     private static environmentKey: string | null = null;
   
     static init(environmentKey: string): void {
