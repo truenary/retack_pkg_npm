@@ -10,8 +10,8 @@ class ErrorHandler {
       event.reason instanceof Error
         ? event.reason
         : new Error(
-            typeof event.reason === "string" ? event.reason : "Unknown reason"
-          );
+          typeof event.reason === "string" ? event.reason : "Unknown reason"
+        );
     CustomLogger.logError(error);
   }
 
@@ -24,8 +24,8 @@ class ErrorHandler {
     CustomLogger.sendErrorToEndpoint(errorDetails);
   }
 
-  static init(environmentKey: string): void {
-    CustomLogger.init(environmentKey); // Initialize the environment key once
+  static init(env_key: string): void {
+    CustomLogger.init(env_key); // Initialize the environment key once
 
     if (typeof window !== "undefined") {
       // Browser environment
