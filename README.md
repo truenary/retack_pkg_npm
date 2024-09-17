@@ -17,8 +17,8 @@ import { CustomLogger } from "retack-sdk-app-observer";
 
 `Initialize the SDK with your environment key`
 
-const environmentKey = "your-environment-key";
-CustomLogger.init(environmentKey);
+const env_key = "your-environment-key";
+CustomLogger.init(env_key);
 
 ## Automatic Error Handling
 
@@ -33,8 +33,8 @@ import ReactDOM from "react-dom";
 import { CustomLogger } from "retack-sdk-app-observer";
 
 `Initialize the Retack SDK`
-const environmentKey = "your-environment-key";
-CustomLogger.init(environmentKey);
+const env_key = "your-environment-key";
+CustomLogger.init(env_key);
 
 try {
 `Your application code`
@@ -53,7 +53,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(<App />);
 
 ## In this example:
 
-The SDK is initialized with the environmentKey.
+The SDK is initialized with the env_key.
 Any errors within your React application are automatically reported.
 You can also manually log errors if needed.
 Reporting Errors Manually

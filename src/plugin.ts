@@ -1,8 +1,8 @@
 import ErrorHandler from './ErrorHandler';
 
-export function initializePlugin(environmentKey: string) {
-  if (!environmentKey) {
+export function initializePlugin(env_key: string) {
+  if (!env_key) {
     throw new Error('Environment key must be provided.');
   }
-  ErrorHandler.init(environmentKey);
+  ErrorHandler.init(env_key);
 }
