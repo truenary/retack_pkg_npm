@@ -11,14 +11,15 @@ npm install retack-sdk-app-observer
 ## Usage
 
 Initialize the SDK
-To start using the SDK, you need to initialize it with your environment key. This setup should typically be done at the beginning of your application, such as in index.tsx or index.js.
+To start using the SDK, you need to initialize it with your environment key and app version. This setup should typically be done at the beginning of your application, such as in index.tsx or index.js.
 
 import { CustomLogger } from "retack-sdk-app-observer";
 
-`Initialize the SDK with your environment key`
+`Initialize the SDK with your environment key and app version`
 
-const env_key = "your-environment-key";
-CustomLogger.init(env_key);
+const envKey = "your-environment-key";
+const appVersion = "your-app-version";
+CustomLogger.init(envKey, appVersion);
 
 ## Automatic Error Handling
 
@@ -33,8 +34,9 @@ import ReactDOM from "react-dom";
 import { CustomLogger } from "retack-sdk-app-observer";
 
 `Initialize the Retack SDK`
-const env_key = "your-environment-key";
-CustomLogger.init(env_key);
+const envKey = "your-environment-key"; 
+const appVersion = "your-app-version";
+CustomLogger.init(envKey, appVersion);
 
 try {
 `Your application code`
@@ -53,7 +55,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(<App />);
 
 ## In this example:
 
-The SDK is initialized with the env_key.
+The SDK is initialized with the envKey and appVersion.
 Any errors within your React application are automatically reported.
 You can also manually log errors if needed.
 Reporting Errors Manually

@@ -1,8 +1,9 @@
 import ErrorHandler from './ErrorHandler';
 
-export function initializePlugin(env_key: string) {
-  if (!env_key) {
-    throw new Error('Environment key must be provided.');
+export function initializePlugin(envKey: string, appVersion: string) {
+  if (!envKey || !appVersion) {
+    console.error("Environment key and app version must be provided.");
+    return;
   }
-  ErrorHandler.init(env_key);
+  ErrorHandler.init(envKey, appVersion);
 }

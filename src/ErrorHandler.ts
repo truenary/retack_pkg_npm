@@ -18,14 +18,13 @@ class ErrorHandler {
   static handleUnhandledError(event: ErrorEvent): void {
     const errorDetails = {
       title: event.message,
-      message: `Error occurred in: ${event.filename} at line: ${event.lineno}, column: ${event.colno}`,
       stack: event.error?.stack,
     };
     CustomLogger.sendErrorToEndpoint(errorDetails);
   }
 
-  static init(env_key: string): void {
-    CustomLogger.init(env_key); // Initialize the environment key once
+  static init(envKey: string, appVersion: string): void {
+    CustomLogger.init(envKey, appVersion); // Initialize the environment key and app version once
 
     if (typeof window !== "undefined") {
       // Browser environment
