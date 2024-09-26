@@ -16,22 +16,6 @@ To start using the SDK, you need to initialize it with your environment key and 
 This setup should typically be done at the beginning of your application, such as in `index.tsx` or `index.js`.
 
 ```
-import { CustomLogger } from "retack-sdk-app-observer";
-
-// Initialize the SDK with your environment key and app version
-
-const envKey = "your-environment-key";
-const appVersion = "your-app-version";
-CustomLogger.init(envKey, appVersion);
-```
-
-## Automatic Error Handling
-
-Once initialized, the SDK will automatically capture and report all uncaught errors and unhandled promise rejections to the Retack AI service.
-
-## Usage
-
-```
 import React from "react";
 import ReactDOM from "react-dom";
 import { CustomLogger } from "retack-sdk-app-observer";
@@ -58,17 +42,4 @@ ReactDOM.createRoot(document.getElementById("root")).render(<App />);
 ```
 
 In this example, the SDK is initialized with the `envKey` and `appVersion`.
-Any errors within your React application are automatically reported.
-You can also manually log errors if needed.
-Reporting Errors Manually
-In some cases, you may want to manually log errors. You can do this using the logError method provided by the SDK:
-
-```
-try {
-  // Code that might throw an error
-} catch (error) {
-  CustomLogger.logError(error);
-}
-```
-
-For more information, please visit Retack AI.
+Any errors within your React application will now be reported to Retack.
