@@ -31,8 +31,6 @@ Once initialized, the SDK will automatically capture and report all uncaught err
 
 ## Usage
 
-### Here's an example of how to integrate the SDK into your React application:
-
 ```
 import React from "react";
 import ReactDOM from "react-dom";
@@ -59,9 +57,7 @@ function App() {
 ReactDOM.createRoot(document.getElementById("root")).render(<App />);
 ```
 
-## In this example:
-
-The SDK is initialized with the `envKey` and `appVersion`.
+In this example, the SDK is initialized with the `envKey` and `appVersion`.
 Any errors within your React application are automatically reported.
 You can also manually log errors if needed.
 Reporting Errors Manually
