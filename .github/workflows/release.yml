@@ -11,14 +11,16 @@ on:
 jobs:
   release:
     runs-on: ubuntu-20.04
+    # Store the release type from workflow input to reuse it across steps
+    env:
+      RELEASE_TYPE: ${{ github.event.inputs.release-type }}
 
     steps:
       # Validate the release type
       - name: Validate release type
-        id: validate_release_type
         run: |
-          if [[ "${{ github.event.inputs.release-type }}" != "regular" && "${{ github.event.inputs.release-type }}" != "alpha" && "${{ github.event.inputs.release-type }}" != "beta" && "${{ github.event.inputs.release-type }}" != "rc" ]]; then
-            echo "Error: Invalid release type '${{ github.event.inputs.release-type }}'. It must be one of: regular, alpha, beta, or rc."
+          if [[ "$RELEASE_TYPE" != "regular" && "$RELEASE_TYPE" != "alpha" && "$RELEASE_TYPE" != "beta" && "$RELEASE_TYPE" != "rc" ]]; then
+            echo "Error: Invalid release type '$RELEASE_TYPE'. It must be one of: regular, alpha, beta, or rc."
             exit 1
           fi
 
@@ -52,30 +54,17 @@ jobs:
       - name: Log git status
         run: git status
 
-      # Set preRelease flag based on release type using Environment Files
-      - name: Set preRelease flag
-        id: set_preRelease_flag
-        run: |
-         if [ "${{ github.event.inputs.release-type }}" == "regular" ]; then
-           echo "preRelease=false" >> $GITHUB_ENV
-         else
-           echo "preRelease=true" >> $GITHUB_ENV
-         fi
-
-
       # Run release-it
       - name: Run release-it
         run: |
-          if [ "${{ github.event.inputs.release-type }}" == "regular" ]; then
+          if [ "$RELEASE_TYPE" == "regular" ]; then
             npx release-it
           else
-            npx release-it --preRelease=${{ github.event.inputs.release-type }}
+            npx release-it --preRelease=$RELEASE_TYPE
           fi
-          echo "Release process completed successfully."
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           TOKEN_GITHUB: ${{ secrets.TOKEN_GITHUB }}
-          prerelease: ${{ steps.set_preRelease_flag.outputs.preRelease }}
 
       # If the release step fails, print and upload the NPM error log
       - name: Print NPM error log
@@ -84,6 +73,7 @@ jobs:
           echo "Release process failed. Check the NPM error log for details."
           cat /home/runner/.npm/_logs/*-debug-0.log
 
+      # Upload NPM error log if release fails
       - name: Upload NPM error log
         if: failure()
         uses: actions/upload-artifact@v3
