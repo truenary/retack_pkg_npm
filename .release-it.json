@@ -1,0 +1,43 @@
+{
+  "$schema": "https://unpkg.com/release-it/schema/release-it.json",
+  "git": {
+    "requireBranch": "main",
+    "push": true,
+    "tagName": "v${version}"
+  },
+  "hooks": {
+    "before:init": [
+      "git pull",
+      "npm run lint"
+    ],
+    "after:bump": [
+      "npm run build"
+    ],
+    "after:release": [
+      "echo 'Releasing version ${version}'"
+    ]
+  },
+  "github": {
+    "release": true,
+    "releaseName": "Release ${version}",
+    "preRelease": false,
+    "autoGenerate": true,
+    "tokenRef": "TOKEN_GITHUB",
+    "contributors": true
+  },
+  "npm": {
+    "publish": true,
+    "ignoreVersion": false,
+    "skipChecks": true,
+    "registry": "https://registry.npmjs.org/",
+    "tokenRef": "NPM_TOKEN"
+  },
+  "plugins": {
+    "@release-it/conventional-changelog": {
+      "preset": {
+        "name": "angular"
+      },
+      "infile": "CHANGELOG.md"
+    }
+  }
+}
