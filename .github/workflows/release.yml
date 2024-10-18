@@ -1,0 +1,82 @@
+name: Release & Publish to NPM
+
+on:
+  workflow_dispatch:
+    inputs:
+      release-type:
+        description: 'Specify release type: regular, alpha, beta, or rc'
+        required: true
+        default: 'regular'
+
+jobs:
+  release:
+    runs-on: ubuntu-20.04
+    # Store the release type from workflow input to reuse it across steps
+    env:
+      RELEASE_TYPE: ${{ github.event.inputs.release-type }}
+
+    steps:
+      # Validate the release type
+      - name: Validate release type
+        run: |
+          if [[ "$RELEASE_TYPE" != "regular" && "$RELEASE_TYPE" != "alpha" && "$RELEASE_TYPE" != "beta" && "$RELEASE_TYPE" != "rc" ]]; then
+            echo "Error: Invalid release type '$RELEASE_TYPE'. It must be one of: regular, alpha, beta, or rc."
+            exit 1
+          fi
+
+      # Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+
+      # Checkout source code
+      - name: Checkout source code
+        uses: actions/checkout@v3
+
+      # Clear NPM cache
+      - name: Clear NPM cache
+        run: npm cache clean --force
+
+      # Install dependencies
+      - name: Install dependencies
+        run: npm ci --prefer-offline --retry 3
+
+      # Initialize NPM config with token
+      - name: Initialize NPM config
+        run: npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
+
+      # Set Git user
+      - name: Set Git user
+        run: |
+          git config --global user.email ${{ secrets.GIT_USER_EMAIL }}
+          git config --global user.name ${{ secrets.GIT_USER_NAME }}
+
+      # Log git status
+      - name: Log git status
+        run: git status
+
+      # Run release-it
+      - name: Run release-it
+        run: |
+          if [ "$RELEASE_TYPE" == "regular" ]; then
+            npx release-it
+          else
+            npx release-it --preRelease=$RELEASE_TYPE
+          fi
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          TOKEN_GITHUB: ${{ secrets.TOKEN_GITHUB }}
+
+      # If the release step fails, print and upload the NPM error log
+      - name: Print NPM error log
+        if: failure()
+        run: |
+          echo "Release process failed. Check the NPM error log for details."
+          cat /home/runner/.npm/_logs/*-debug-0.log
+
+      # Upload NPM error log if release fails
+      - name: Upload NPM error log
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: npm-error-log
+          path: /home/runner/.npm/_logs/*-debug-0.log
