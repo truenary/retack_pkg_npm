@@ -3,7 +3,7 @@
   "git": {
     "requireBranch": "main",
     "push": true,
-    "commitMessage": "chore(release): v${version}",
+    "commitMessage": "chore(release): ${version}",
     "tagName": "v${version}"
   },
   "hooks": {
